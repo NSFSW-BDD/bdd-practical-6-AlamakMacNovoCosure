@@ -2,33 +2,6 @@
 const model = require("../models/userModel");
 
 var userController = {
-
-  loginUser: (req, res, next) => {
-    const data = {
-      email: req.body.email,
-      password: req.body.password
-    };
-
-    const callback = (error, results, fields) => {
-      if (error) {
-        console.error("Error Login:", error);
-        res.status(500).json(error);
-      } else {
-        if (results.length == 0) {//no match 
-          res.status(404).json({
-            message: "email/password wrong",
-          });
-
-        } else { //match email and password
-          res.locals.userid = results[0].userid;//saves userid from database in res.locals for use in jwt payload
-          res.locals.role = results[0].role;  //saves role from database in res.locals for use in jwt payload
-          next(); //call next middleware to issue token
-        }
-      }
-    };
-    userModel.loginUser(data, callback);
-  },
-
   readAllUser: (req, res, next) => {
     const callback = (error, results, fields) => {
       if (error) {
@@ -103,7 +76,7 @@ var userController = {
         else res.status(204).send(); // 204 No Content
       }
     }
-
+    
     model.updateUserById(data, callback);
   }
 
@@ -127,6 +100,52 @@ var userController = {
     }
 
     model.deleteUserById(data, callback);
+  },
+
+  loginUser: (req, res, next) => {
+
+    const data = {
+
+      email: req.body.email,
+
+      password: req.body.password
+
+    };
+
+    const callback = (error, results, fields) => {
+
+      if (error) {
+
+        console.error("Error Login:", error);
+
+        res.status(500).json(error);
+
+      } else {
+
+        if (results.length == 0) {//no match 
+
+          res.status(404).json({
+
+            message: "email/password wrong",
+
+          });
+
+        } else { //match email and password
+
+          res.locals.userid = results[0].userid;//saves userid from database in res.locals for use in jwt payload
+
+          res.locals.role = results[0].role;  //saves role from database in res.locals for use in jwt payload
+
+          next(); //call next middleware to issue token
+
+        }
+
+      }
+
+    };
+
+    userModel.loginUser(data, callback);
+
   }
 }
 

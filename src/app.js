@@ -20,6 +20,11 @@ app.use(express.urlencoded({extended:false}));
 const mainRoutes = require('./routes/mainRoutes');
 app.use("/", mainRoutes);
 
+// temporary test on the browser
+// app.get('/', (req, res) => {
+//     res.send('I am Alive!')
+//   })
+
 //////////////////////////////////////////////////////
 // EXPORT APP
 //////////////////////////////////////////////////////
