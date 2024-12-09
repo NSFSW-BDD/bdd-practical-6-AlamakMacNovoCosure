@@ -19,12 +19,12 @@ var categoryModel = {
         pool.query(SQLSTATEMENT, VALUES, callback);
     },
 
-    insertNewCategory: (data, callback) => {
+    createNewCategory: (data, callback) => {
         const SQLSTATEMENT = `
-        INSERT INTO category (name, description)
-        VALUES (?,?);
+        INSERT INTO category (catid, name, description)
+        VALUES (?,?,?);
         `;
-        const VALUES = [data.name, data.description];
+        const VALUES = [data.catid, data.name, data.description];
 
         pool.query(SQLSTATEMENT, VALUES, callback);
     },

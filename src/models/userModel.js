@@ -25,7 +25,7 @@ var userModel = {
 
   insertNewUser: (data, callback) => {
     const SQLSTATEMENT = `
-    INSERT INTO user (username, email,role,password)
+    INSERT INTO user (username,email,role,password)
     VALUES (?,?,?,?);
     `;
     const VALUES = [data.username, data.email, data.role, data.password];

@@ -21,10 +21,10 @@ var furnitureModel ={
 
     insertNewFurniture: (data, callback) => {
         const SQLSTATEMENT = `
-        INSERT INTO furniture (name, description, price, quantity, catid)
-        VALUES (?,?,?,?,?);
+        INSERT INTO furniture (fid, name, description, price, quantity, catid)
+        VALUES (?,?,?,?,?,?);
         `;
-        const VALUES = [data.name, data.description, data.price, data.quantity, data.catid];
+        const VALUES = [data.fid, data.name, data.description, data.price, data.quantity, data.catid];
 
         pool.query(SQLSTATEMENT, VALUES, callback);
     },
@@ -33,9 +33,9 @@ var furnitureModel ={
         const SQLSTATEMENT = `
         UPDATE furniture
         SET price=?, quantity=?
-        WHERE fid=?;
+        WHERE catid=?;
         `;
-        const VALUES = [data.name, data.description, data.price, data.quantity, data.catid];
+        const VALUES = [data.price, data.quantity, data.catid];
 
         pool.query(SQLSTATEMENT, VALUES, callback);
     },

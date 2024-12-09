@@ -1,22 +1,23 @@
 // const data = require("../data");
-const model = require("../models/userModel");
+const userModel = require("../models/userModel");
+// const model = require("../models/userModel");
 
 var userController = {
   readAllUser: (req, res, next) => {
     const callback = (error, results, fields) => {
       if (error) {
-        console.error("Error readAllCategory:", error);
+        console.error("Error readAllUser:", error);
         res.status(500).json(error);
       } else res.status(200).json(results);
-    }
+    };
 
-    model.getAllUsers(callback);
-  }
+    userModel.getAllUsers(callback);
+  },
 
-  , readUserById: (req, res, next) => {
+  readUserById: (req, res, next) => {
     const data = {
-      userid: req.params.userid
-    }
+      userid: req.params.userid,
+    };
 
     const callback = (error, results, fields) => {
       if (error) {
@@ -25,23 +26,22 @@ var userController = {
       } else {
         if (results.length == 0) {
           res.status(404).json({
-            message: "User not found"
+            message: "User not found",
           });
-        }
-        else res.status(200).json(results[0]);
+        } else res.status(200).json(results[0]);
       }
-    }
+    };
 
-    model.getUserById(data, callback);
-  }
+    userModel.getUserById(data, callback);
+  },
 
-  , createNewUser: (req, res, next) => {
+  createNewUser: (req, res, next) => {
     const data = {
       username: req.body.username,
       email: req.body.email,
       role: req.body.role,
-      password: req.body.password
-    }
+      password: req.body.password,
+    };
 
     const callback = (error, results, fields) => {
       if (error) {
@@ -50,18 +50,17 @@ var userController = {
       } else {
         res.status(201).json(results);
       }
-    }
+    };
 
-    model.insertNewUser(data, callback);
-  }
+    userModel.insertNewUser(data, callback);
+  },
 
-  , updateUserById: (req, res, next) => {
-
+  updateUserById: (req, res, next) => {
     const data = {
-      id: req.params.id,
-      username: req.body.username,
-      email: req.body.email
-    }
+      userid: req.params.userid,
+      email: req.body.email,
+      password: req.body.password,
+    };
 
     const callback = (error, results, fields) => {
       if (error) {
@@ -70,20 +69,19 @@ var userController = {
       } else {
         if (results.affectedRows == 0) {
           res.status(404).json({
-            message: "User not found"
+            message: "User not found",
           });
-        }
-        else res.status(204).send(); // 204 No Content
+        } else res.status(204).send(); // 204 No Content
       }
-    }
-    
-    model.updateUserById(data, callback);
-  }
+    };
 
-  , deleteUserById: (req, res, next) => {
+    userModel.updateUserById(data, callback);
+  },
+
+  deleteUserById: (req, res, next) => {
     const data = {
-      userid: req.params.userid
-    }
+      userid: req.params.userid,
+    };
 
     const callback = (error, results, fields) => {
       if (error) {
@@ -92,61 +90,43 @@ var userController = {
       } else {
         if (results.affectedRows == 0) {
           res.status(404).json({
-            message: "User not found"
+            message: "User not found",
           });
-        }
-        else res.status(204).send(); // 204 No Content            
+        } else res.status(204).send(); // 204 No Content
       }
-    }
+    };
 
-    model.deleteUserById(data, callback);
+    userModel.deleteUserById(data, callback);
   },
 
   loginUser: (req, res, next) => {
-
     const data = {
-
       email: req.body.email,
-
-      password: req.body.password
-
+      password: req.body.password,
     };
 
     const callback = (error, results, fields) => {
-
       if (error) {
-
         console.error("Error Login:", error);
-
         res.status(500).json(error);
-
       } else {
-
-        if (results.length == 0) {//no match 
-
+        if (results.length == 0) {
+          //no match
           res.status(404).json({
-
             message: "email/password wrong",
-
           });
-
-        } else { //match email and password
-
-          res.locals.userid = results[0].userid;//saves userid from database in res.locals for use in jwt payload
-
-          res.locals.role = results[0].role;  //saves role from database in res.locals for use in jwt payload
-
+        } else {
+          //match email and password
+          res.locals.userid = results[0].userid; //saves userid from database in res.locals for use in jwt payload
+          res.locals.username = results[0].username;//saves userid from database in res.locals for use in jwt payload
+          res.locals.role = results[0].role; //saves role from database in res.locals for use in jwt payload
           next(); //call next middleware to issue token
-
         }
-
       }
-
     };
 
     userModel.loginUser(data, callback);
-
-  }
-}
+  },
+};
 
 module.exports = userController;

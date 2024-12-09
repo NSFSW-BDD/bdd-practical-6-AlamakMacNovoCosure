@@ -12,6 +12,7 @@ var jwtMiddleware = {
     generateToken: (req, res, next) => {
         const payload = {
             userid: res.locals.userid,
+            username: res.locals.username,
             role: res.locals.role,
             timestamp: new Date()
         };
@@ -27,6 +28,7 @@ var jwtMiddleware = {
                 res.status(500).json(err);
             } else {
                 res.locals.token = token;
+                res.locals.message = "Token generated";
                 next();
             }
         };
@@ -80,7 +82,16 @@ var jwtMiddleware = {
         };
         // Verify the token
         jwt.verify(token, secretKey, callback);
-    }
+    },
+
+    verifyAdmin: (req, res, next) => {
+        if (res.locals.role == "admin") {
+          next();
+        }else{
+          return res.status(401).json({ error: "Invalid Access Role" });
+        }
+    
+      }
 
 }
 
